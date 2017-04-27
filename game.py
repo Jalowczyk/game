@@ -6,6 +6,7 @@ def handle_user_decision():
 
     return user_decision_height, user_decision_width
 
+
 def create_board(width, height):
 
     board = []
@@ -24,7 +25,7 @@ def create_board(width, height):
     board.append(row1)
 
     for i in range(height-2):
-        board.append(row2)
+        board.append(row2[:])
 
     board.append(row1)
 
@@ -37,10 +38,37 @@ def print_board(board):
         print(*row)
 
 
+def getch():
+    import sys, tty, termios
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+
+def insert_player(board, y, x):
+    player = "@"
+
+    board[y][x] = "@"
+
+    return board
+
+
 def main():
+
     width, height = handle_user_decision()
+    x_hero = 1
+    y_hero = 1
     board = create_board(width, height)
+    insert_player(board, y_hero, x_hero)
     print_board(board)
-    #board = insert_player(board, 1, 1)
 
 main()
+
+while True:
+    x = getch()
+    print(x)
