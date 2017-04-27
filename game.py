@@ -73,13 +73,17 @@ def main():
 
         x = getch()
         if x == "d":
-            x_hero += 1
+            if board[y_hero][x_hero + 1] != "X":
+                x_hero += 1
         elif x == "a":
-            x_hero -= 1
+            if board[y_hero][x_hero - 1] != "X":
+                x_hero -= 1
         elif x == "s":
-            y_hero += 1
-        elif x == "s":
-            y_hero -= 1
+            if board[y_hero + 1][x_hero] != "X":
+                y_hero += 1
+        elif x == "w":
+            if board[y_hero - 1][x_hero] != "X":
+                y_hero -= 1
         elif x == "q":
             sys.exit()
 
