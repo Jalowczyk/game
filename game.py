@@ -11,11 +11,18 @@ def read_welcome_screen_file():
 
 def create_board():
     board_file = open('board.csv', 'r')
-    reader_board = csv.reader(board_file)
-    board = list(list(reader_board))
+    #reader_board = csv.reader(board_file)
+    #board = list(reader_board)
+    board = []
+    for line in board_file:
+        line = list(line[:-1])
+        board.append(line)
+
     board_file.close()
 
 
+    #for line in board_file:
+        #board.append(list(line[:-1]))
 
     return board
 
@@ -25,8 +32,9 @@ def print_board(board):
 
     os. system("clear")
     for row in board:
-        print(*row)
-
+        for sign in row:
+            print(sign, end="")
+        print('')
 
 def getch():
     """Connects keys with funcion."""
@@ -56,7 +64,7 @@ def main():
     x_hero = 1 #starting position of player
     y_hero = 1
     board = create_board()
-    print(board)
+    #print_board(board)
     x = getch()
 
     while x != "q":
