@@ -28,7 +28,7 @@ def move_by(y, x, y_change, x_change):
 
 def main():
     """Handle whole game."""
-    os. system("clear")
+    os.system("clear")
     read_welcome_screen_file()
     x_hero = 1  #starting position of player
     y_hero = 1
@@ -45,7 +45,7 @@ def main():
     while input_key != "q":
         diff_x = 0
         diff_y = 0
-        
+
         input_key = getch()  #control
         if input_key == "d":
             diff_x = 1
@@ -60,12 +60,14 @@ def main():
             diff_x = 0
             diff_y = -1
 
-        if can_player_move(y_hero + diff_y, x_hero + diff_x, obstacles_letters, board):
+        y_hero_new = y_hero + diff_y
+        x_hero_new = x_hero + diff_x
+        if can_player_move(y_hero_new, x_hero_new, obstacles_letters, board):
             y_hero, x_hero = move_by(y_hero, x_hero, diff_y, diff_x)
-        elif board[y_hero + diff_y][x_hero + diff_x] == key_giver and key not in added_items:
+        elif board[y_hero_new][x_hero_new] == key_giver and key not in added_items:
             added_items.append(key)
             add_to_inventory(inventory, added_items)
-        elif board[y_hero + diff_y][x_hero + diff_x] in table_elements and note not in added_items and key in inventory:
+        elif board[y_hero_new][x_hero_new] in table_elements and note not in added_items and key in inventory:
             added_items.append(note)
             add_to_inventory(inventory, added_items)
 
