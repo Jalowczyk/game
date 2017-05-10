@@ -16,6 +16,15 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
+def can_player_move(y, x, obstacles_letters, board):
+    return board[y][x] not in obstacles_letters
+
+def move_by(y, x, y_change, x_change):
+    y += y_change
+    x += x_change
+
+    return y, x
+
 
 def main():
     """Handle whole game."""
@@ -24,51 +33,43 @@ def main():
     x_hero = 1  #starting position of player
     y_hero = 1
     board = create_board()
-    x = getch()
-    obstacles_letters = ["X", "{", "}", "_", "|"]
+    input_key = getch()
+    obstacles_letters = ["X", "_", "|", "♞"]
     inventory = {"purple key": 2, "dope": 3}
     added_items = []
+    key_giver = "♞"
+    table_elements = ["_", "|"]
+    note = "note"
+    key = "key"
 
-    while x != "q":
+    while input_key != "q":
+        diff_x = 0
+        diff_y = 0
+        
+        input_key = getch()  #control
+        if input_key == "d":
+            diff_x = 1
+            diff_y = 0
+        elif input_key == "a":
+            diff_x = -1
+            diff_y = 0
+        elif input_key == "s":
+            diff_x = 0
+            diff_y = 1
+        elif input_key == "w":
+            diff_x = 0
+            diff_y = -1
 
-        x = getch() #control
-        if x == "d":
-            if board[y_hero][x_hero + 1] not in obstacles_letters:
-                x_hero += 1
-            elif board[y_hero][x_hero + 1] in ["{", "}"] and "key" not in added_items:
-                added_items.append("key")
-                add_to_inventory(inventory, added_items)
-            elif board[y_hero][x_hero + 1] in ["_", "|"] and "note" not in added_items and "key" in inventory:
-                    added_items.append("note")
-                    add_to_inventory(inventory, added_items)
-        elif x == "a":
-            if board[y_hero][x_hero - 1] not in obstacles_letters:
-                x_hero -= 1
-            elif board[y_hero][x_hero - 1] in ["{", "}"] and "key" not in added_items:
-                added_items.append("key")
-                add_to_inventory(inventory, added_items)
-            elif board[y_hero][x_hero - 1] in ["_", "|"] and "note" not in added_items and "key" in inventory:
-                added_items.append("note")
-                add_to_inventory(inventory, added_items)
-        elif x == "s":
-            if board[y_hero + 1][x_hero] not in obstacles_letters:
-                y_hero += 1
-            elif board[y_hero + 1][x_hero] in ["{", "}"] and "key" not in added_items:
-                added_items.append("key")
-                add_to_inventory(inventory, added_items)
-            elif board[y_hero + 1][x_hero] in ["_", "|"] and "note" not in added_items and "key" in inventory:
-                added_items.append("note")
-                add_to_inventory(inventory, added_items)
-        elif x == "w":
-            if board[y_hero - 1][x_hero] not in obstacles_letters:
-                y_hero -= 1
-            elif board[y_hero - 1][x_hero] in ["{", "}"] and "key" not in added_items:
-                added_items.append("key")
-                add_to_inventory(inventory, added_items)
-            elif board[y_hero - 1][x_hero] in ["_", "|"] and "note" not in added_items and "key" in inventory:
-                added_items.append("note")
-                add_to_inventory(inventory, added_items)
-        elif x == "q":
+        if can_player_move(y_hero + diff_y, x_hero + diff_x, obstacles_letters, board):
+            y_hero, x_hero = move_by(y_hero, x_hero, diff_y, diff_x)
+        elif board[y_hero + diff_y][x_hero + diff_x] == key_giver and key not in added_items:
+            added_items.append(key)
+            add_to_inventory(inventory, added_items)
+        elif board[y_hero + diff_y][x_hero + diff_x] in table_elements and note not in added_items and key in inventory:
+            added_items.append(note)
+            add_to_inventory(inventory, added_items)
+
+        elif input_key == "q":
             sys.exit()
 
         board = create_board()
