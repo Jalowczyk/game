@@ -1,5 +1,5 @@
 import sys, tty, termios, os, csv
-from inventory import print_table, add_to_inventory
+from graphical_user_interface import print_graphical_user_interface, add_to_inventory, subtract_dutifulness, print_description
 from screens import read_welcome_screen_file, read_note1
 from create_board import create_board, print_board, insert_player
 
@@ -32,38 +32,44 @@ def main():
     read_welcome_screen_file()
     x_hero = 1  #starting position of player
     y_hero = 1
+    dutifulness = 100
+    lives = 3
     board = create_board()
     input_key = getch()
-    obstacles_letters = ["X", "_", "|", "♞"]
+
+    obstacles_letters = ["X", "_", "|", "♞", "/"]
+    table_elements = ["_", "|"]
+    door = "/"
+    blood = "~"
     inventory = {"purple key": 2, "dope": 3}
     added_items = []
     key_giver = "♞"
-    table_elements = ["_", "|"]
+
     note = "note"
     key = "key"
 
     while input_key != "q":
-        diff_x = 0
-        diff_y = 0
+        x_diff = 0
+        y_diff = 0
 
         input_key = getch()  #control
         if input_key == "d":
-            diff_x = 1
-            diff_y = 0
+            x_diff = 1
+            y_diff = 0
         elif input_key == "a":
-            diff_x = -1
-            diff_y = 0
+            x_diff = -1
+            y_diff = 0
         elif input_key == "s":
-            diff_x = 0
-            diff_y = 1
+            x_diff = 0
+            y_diff = 1
         elif input_key == "w":
-            diff_x = 0
-            diff_y = -1
+            x_diff = 0
+            y_diff = -1
 
-        y_hero_new = y_hero + diff_y
-        x_hero_new = x_hero + diff_x
+        y_hero_new = y_hero + y_diff
+        x_hero_new = x_hero + x_diff
         if can_player_move(y_hero_new, x_hero_new, obstacles_letters, board):
-            y_hero, x_hero = move_by(y_hero, x_hero, diff_y, diff_x)
+            y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
         elif board[y_hero_new][x_hero_new] == key_giver and key not in added_items:
             added_items.append(key)
             add_to_inventory(inventory, added_items)
@@ -71,13 +77,22 @@ def main():
             added_items.append(note)
             add_to_inventory(inventory, added_items)
 
+        if board[y_hero_new][x_hero_new] == blood:
+            dutifulness = subtract_dutifulness(dutifulness)
+
+        if board[y_hero_new][x_hero_new] == door and door in obstacles_letters and key in inventory:
+            obstacles_letters.remove(door)
+
+
+
         elif input_key == "q":
             sys.exit()
 
         board = create_board()
         insert_player(board, y_hero, x_hero)
         print_board(board)
-        print_table(inventory)
+        print_graphical_user_interface(inventory, dutifulness, lives)
+        print_description()
 
 
 main()
