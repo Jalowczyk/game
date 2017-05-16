@@ -2,7 +2,8 @@ import sys, tty, termios, os, csv
 from graphical_user_interface import *
 from screens import *
 from create_board import *
-
+from interactions import *
+from levels import *
 
 
 def getch():
@@ -17,8 +18,8 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-def is_move_possible(y, x, obstacles_letters, board):
-    return board[y][x] not in obstacles_letters
+def is_move_possible(y, x, obstacles, board):
+    return board[y][x] not in obstacles
 
 def move_by(y, x, y_change, x_change):
     y += y_change
@@ -46,31 +47,18 @@ def control_position(input_key):
 
     return x_diff, y_diff
 
-
-def is_key_in_inventory(key, added_items):
-    return key in added_items
-
-
-def is_touching_horse(position_on_board, horse):
-    return position_on_board == horse
-
-def is_touching_table(position_on_board, table_elements):
-    return position_on_board in table_elements
-
-def is_note_in_inventory(note, added_items):
-    return note in added_items
-
-def main():
-    """Handle whole game."""
+def first_level():
+    """Handle game's first level game."""
     os.system("clear")
     read_welcome_screen_file()
     x_hero = 1  #starting position of player
     y_hero = 1
     dutifulness = 100
     lives = 3
-    board = create_board()
+    board = create_board('board.csv')
+    previous_sign = board[y_hero][x_hero]
 
-    obstacles_letters = ["X", "_", "|", "♞", "/"]
+    obstacles = ["X", "_", "|", "♞", "/"]
     table_elements = ["_", "|"]
     door = "/"
     blood = "~"
@@ -89,10 +77,10 @@ def main():
 
         input_key = getch()
         x_diff, y_diff = control_position(input_key)
+        board[y_hero][x_hero] = previous_sign
 
-        if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles_letters, board):
+        if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
-
 
         if is_touching_horse(board[y_hero + y_diff][x_hero + x_diff], horse) and not is_key_in_inventory(key, added_items):
             added_items.append(key)
@@ -102,22 +90,66 @@ def main():
             added_items.append(note)
             add_to_inventory(inventory, added_items)
 
-        if board[y_hero + y_diff][x_hero + x_diff] == blood:
+        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if board[y_hero + y_diff][x_hero + x_diff] == door and door in obstacles_letters and key in inventory:
-            obstacles_letters.remove(door)
-
-
+        if is_touching_door(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_key_in_inventory(key, added_items):
+            obstacles.remove(door)
+            return dutifulness, lives, inventory
 
         elif input_key == "q":
             sys.exit()
 
-        board = create_board()
+        previous_sign = board[y_hero][x_hero]
         insert_player(board, y_hero, x_hero)
         print_board(board)
         print_graphical_user_interface(inventory, dutifulness, lives)
-        print_description()
+        print_first_level_description()
 
+def second_level(dutifulness, lives, inventory):
+    """Handle game's second level game."""
+    os.system("clear")
+    x_hero = 1  #starting position of player
+    y_hero = 1
+    board = create_board("las.csv")
+    previous_sign = board[y_hero][x_hero]
+
+    obstacles = ["▓", "☘", "༊", "✀", "⛏"]
+    added_items = []
+    blood = "~"
+    twanas_list = ["௸", "௺", "இ", "௫", "௵", "ඖ", "ඣ", "ඐ", "ණ"]
+    twanas = "twanas"
+
+    input_key = getch()  #control
+
+    while input_key != "q":
+        x_diff = 0
+        y_diff = 0
+
+        input_key = getch()
+        x_diff, y_diff = control_position(input_key)
+        board[y_hero][x_hero] = previous_sign
+
+        if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
+            y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
+
+        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
+            dutifulness = subtract_dutifulness(dutifulness)
+
+        if is_touching_twanas(board[y_hero + y_diff][x_hero + x_diff], twanas_list):
+            twanas_list.remove(board[y_hero + y_diff][x_hero + x_diff])
+            board[y_hero + y_diff][x_hero + x_diff] = " "
+            added_items.append(twanas)
+            add_to_inventory(inventory, added_items)
+
+        previous_sign = board[y_hero][x_hero]
+        insert_player(board, y_hero, x_hero)
+        print_board(board)
+        print_graphical_user_interface(inventory, dutifulness, lives)
+        print_second_level_description()
+
+def main():
+    dutifulness, lives, inventory = first_level()
+    second_level(dutifulness, lives, inventory)
 
 main()

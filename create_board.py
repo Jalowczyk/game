@@ -9,10 +9,10 @@ ENDC = '\033[0m'
 BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
 
-sign_colours = {"X": OKBLUE}
+sign_colours = {"X": OKBLUE, "/": HEADER}
 
-def create_board():
-    board_file = open('board.csv', 'r')
+def create_board(filename):
+    board_file = open(filename, 'r')
     board = []
     for line in board_file:
         line = list(line[:-1])

@@ -5,9 +5,9 @@ def print_graphical_user_interface(inventory, dutifulness, lives):
     #Finds the longest word by counting letters of every word in inventory.
     the_longest_word = (max(map(len, inventory)))
 
-    print("{} {:>30} {}".format("Inventory:", "Dutifulness:", dutifulness))
+    print("{} {:>25} {}".format("Inventory:", "Dutifulness:", dutifulness))
     print("-" * (9 + the_longest_word), end ="")
-    print("{:>16} {}".format("Lives:", lives))
+    print("{:>11} {}".format("Lives:", lives))
     #Formats table width to be as long as the longest item.
     print("{:>8} {:>{width}}".format('count', 'item name',
         width = the_longest_word))
@@ -43,6 +43,10 @@ def subtract_dutifulness(dutifulness):
 
     return dutifulness
 
-def print_description():
+def print_first_level_description():
 
     print("\nDESCRIPTION BLAHBLAHBLAH")
+
+def print_second_level_description():
+
+    print("\nSECOND LEVEL OMG")
