@@ -111,11 +111,13 @@ def second_level(dutifulness, lives, inventory):
     x_hero = 1  #starting position of player
     y_hero = 1
     board = create_board("las.csv")
+    previous_sign = board[y_hero][x_hero]
 
     obstacles = ["▓", "☘", "༊", "✀", "⛏"]
     added_items = []
     blood = "~"
-    twanas = ["௸", "௺", "இ", "௫", "௵"]
+    twanas_list = ["௸", "௺", "இ", "௫", "௵", "ඖ", "ඣ", "ඐ", "ණ"]
+    twanas = "twanas"
 
     input_key = getch()  #control
 
@@ -125,6 +127,7 @@ def second_level(dutifulness, lives, inventory):
 
         input_key = getch()
         x_diff, y_diff = control_position(input_key)
+        board[y_hero][x_hero] = previous_sign
 
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
@@ -132,6 +135,13 @@ def second_level(dutifulness, lives, inventory):
         if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
+        if is_touching_twanas(board[y_hero + y_diff][x_hero + x_diff], twanas_list):
+            twanas_list.remove(board[y_hero + y_diff][x_hero + x_diff])
+            board[y_hero + y_diff][x_hero + x_diff] = " "
+            added_items.append(twanas)
+            add_to_inventory(inventory, added_items)
+
+        previous_sign = board[y_hero][x_hero]
         insert_player(board, y_hero, x_hero)
         print_board(board)
         print_graphical_user_interface(inventory, dutifulness, lives)
