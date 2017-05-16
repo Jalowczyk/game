@@ -3,54 +3,10 @@ from graphical_user_interface import print_graphical_user_interface, add_to_inve
 from screens import read_welcome_screen_file, read_note1
 from create_board import create_board, print_board, insert_player
 
-'''
-from random import randint
-
-random_number = []
-while len(random_number) != 3:
-    num = randint(0, 9)
-    if num not in random_number:
-        random_number.append(str(num))
-
-# random_number = ''.join(random_number)
-print(random_number)
-
-while True:
-    guess_number = input("pick 3 digit number: ")
-
-    while not guess_number.isdigit() or len(guess_number) != 3:
-        guess_number = input("It is not an integer!")
-
-    guess_number = list(guess_number)
-    print (guess_number)
-
-    printing_result = []
-
-    for i, elem in enumerate(guess_number):
-        if elem in random_number:
-            if elem == random_number[i]:
-                printing_result.insert(0, 'hot')
-            else:
-                printing_result.append('warm')
-
-    if not printing_result:
-        print ("cold")
-
-    print (*printing_result)
-    if all([i == 'hot' for i in printing_result]):
-        print ('cool')
-        break
-
-     goal = "".join(printing_result)
-    if goal == "hothothot":
-        print ("Cool")
-        break
-
-'''
 
 
 def getch():
-    """Connects keys with funcion."""
+    """Connects keys with function."""
 
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
