@@ -34,7 +34,7 @@ def add_to_inventory(inventory, added_items):
             inventory[item] += 1
         else:
             inventory[item] = 1
-
+    
     return inventory
 
 def subtract_dutifulness(dutifulness):
