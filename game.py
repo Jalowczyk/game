@@ -1,20 +1,13 @@
+#-*- coding: utf-8 -*-
 import sys, tty, termios, os, csv
-<<<<<<< Updated upstream
 from graphical_user_interface import *
 from screens import *
 from create_board import *
 from interactions import *
 from levels import *
-=======
-from graphical_user_interface import print_graphical_user_interface, add_to_inventory, subtract_dutifulness, print_description
-from screens import read_welcome_screen_file, read_note1
-from create_board import create_board, print_board, insert_player
-
->>>>>>> Stashed changes
-
 
 def getch():
-    """Connects keys with function."""
+    """Connects keys with funcion."""
 
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -25,13 +18,8 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-<<<<<<< Updated upstream
 def is_move_possible(y, x, obstacles, board):
     return board[y][x] not in obstacles
-=======
-def can_player_move(y, x, obstacles_letters, board):
-    return board[y][x] not in obstacles_letters
->>>>>>> Stashed changes
 
 def move_by(y, x, y_change, x_change):
     y += y_change
@@ -39,7 +27,6 @@ def move_by(y, x, y_change, x_change):
 
     return y, x
 
-<<<<<<< Updated upstream
 def control_position(input_key):
 
     if input_key == "d":
@@ -62,41 +49,40 @@ def control_position(input_key):
 
 def first_level():
     """Handle game's first level game."""
-=======
-
-def main():
-    """Handle whole game."""
->>>>>>> Stashed changes
     os.system("clear")
     read_welcome_screen_file()
     x_hero = 1  #starting position of player
     y_hero = 1
     dutifulness = 100
     lives = 3
-<<<<<<< Updated upstream
-    board = create_board('board.csv')
+    board = create_board('home.csv')
     previous_sign = board[y_hero][x_hero]
-=======
-    board = create_board()
-    input_key = getch()
->>>>>>> Stashed changes
 
-    obstacles = ["X", "_", "|", "♞", "/"]
-    table_elements = ["_", "|"]
-    door = "/"
+    items = {"obstacles": ["⟧", "▆", "▓", "ߛ", "☎", "Ր", "♨", "இ", "☘", "□", "▯"],
+            "table_symbol": "▆","door": "⟧", "box": "ߛ", "blood": "~", "answerphone": "□", "front_door": "▯",
+            "record": "record", "door_key": "door key", "note": "note"}
+
+    obstacles = ["⟧", "▆", "▓", "ߛ", "☎", "Ր", "♨", "இ", "☘", "□", "▯"]
+    table_symbol = "▆"
+    door = "⟧"
+    box = "ߛ"
     blood = "~"
-    inventory = {"purple key": 2, "dope": 3}
+    answerphone = "□"
+    front_door = "▯"
+    record = "record"
+    inventory = {"gun": 1, "bullets": 2}
     added_items = []
-    key_giver = "♞"
+
 
     note = "note"
-    key = "key"
+    door_key = "door key"
+
+    input_key = getch()  #control
 
     while input_key != "q":
         x_diff = 0
         y_diff = 0
 
-<<<<<<< Updated upstream
         input_key = getch()
         x_diff, y_diff = control_position(input_key)
         board[y_hero][x_hero] = previous_sign
@@ -104,50 +90,27 @@ def main():
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching_horse(board[y_hero + y_diff][x_hero + x_diff], horse) and not is_key_in_inventory(key, added_items):
-=======
-        input_key = getch()  #control
-        if input_key == "d":
-            x_diff = 1
-            y_diff = 0
-        elif input_key == "a":
-            x_diff = -1
-            y_diff = 0
-        elif input_key == "s":
-            x_diff = 0
-            y_diff = 1
-        elif input_key == "w":
-            x_diff = 0
-            y_diff = -1
-
-        y_hero_new = y_hero + y_diff
-        x_hero_new = x_hero + x_diff
-        if can_player_move(y_hero_new, x_hero_new, obstacles_letters, board):
-            y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
-        elif board[y_hero_new][x_hero_new] == key_giver and key not in added_items:
->>>>>>> Stashed changes
-            added_items.append(key)
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], box) and not is_door_key_in_inventory(door_key, added_items):
+            added_items.append(door_key)
             add_to_inventory(inventory, added_items)
-        elif board[y_hero_new][x_hero_new] in table_elements and note not in added_items and key in inventory:
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], table_symbol) and not is_note_in_inventory(note, added_items):
             added_items.append(note)
             add_to_inventory(inventory, added_items)
 
-<<<<<<< Updated upstream
-        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if is_touching_door(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_key_in_inventory(key, added_items):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], answerphone):
+            added_items.append(record)
+            add_to_inventory(inventory, added_items)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_door_key_in_inventory(door_key, added_items):
+            board[y_hero + y_diff][x_hero + x_diff] = " "
             obstacles.remove(door)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_note_in_inventory(note, added_items) and is_record_in_inventory(inventory, record):
             return dutifulness, lives, inventory
-=======
-        if board[y_hero_new][x_hero_new] == blood:
-            dutifulness = subtract_dutifulness(dutifulness)
-
-        if board[y_hero_new][x_hero_new] == door and door in obstacles_letters and key in inventory:
-            obstacles_letters.remove(door)
-
-
->>>>>>> Stashed changes
 
         elif input_key == "q":
             sys.exit()
@@ -163,14 +126,19 @@ def second_level(dutifulness, lives, inventory):
     os.system("clear")
     x_hero = 1  #starting position of player
     y_hero = 1
-    board = create_board("las.csv")
+    board = create_board("forest.csv")
     previous_sign = board[y_hero][x_hero]
 
-    obstacles = ["▓", "☘", "༊", "✀", "⛏"]
+    obstacles = ["▓", "☘", "༊", "✀", "⛏", "༼"]
     added_items = []
     blood = "~"
-    twanas_list = ["௸", "௺", "இ", "௫", "௵", "ඖ", "ඣ", "ඐ", "ණ"]
+    twanas_symbol = "✞"
     twanas = "twanas"
+    pickaxe_symbol = "⛏"
+    pickaxe = "pickaxe"
+    rock = "༼"
+    scissors = "scissors"
+    scissors_symbol = "✀"
 
     input_key = getch()  #control
 
@@ -185,14 +153,31 @@ def second_level(dutifulness, lives, inventory):
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if is_touching_twanas(board[y_hero + y_diff][x_hero + x_diff], twanas_list):
-            twanas_list.remove(board[y_hero + y_diff][x_hero + x_diff])
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], twanas_symbol):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             added_items.append(twanas)
             add_to_inventory(inventory, added_items)
+            added_items.remove(twanas)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], pickaxe_symbol):
+            board[y_hero + y_diff][x_hero + x_diff] = " "
+            added_items.append(pickaxe)
+            add_to_inventory(inventory, added_items)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], rock) and is_pickaxe_in_inventory(inventory, pickaxe):
+            board[y_hero + y_diff][x_hero + x_diff] = " "
+            obstacles.remove(rock)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], scissors_symbol) and not is_scissors_in_inventory(inventory, scissors):
+            board[y_hero + y_diff][x_hero + x_diff] = " "
+            added_items.append(scissors)
+            add_to_inventory(inventory, added_items)
+
+        if is_scissors_in_inventory(inventory, scissors) and are_all_twanas_in_inventory(inventory):
+            return dutifulness, lives, inventory
 
         previous_sign = board[y_hero][x_hero]
         insert_player(board, y_hero, x_hero)
