@@ -58,6 +58,10 @@ def first_level():
     board = create_board('home.csv')
     previous_sign = board[y_hero][x_hero]
 
+    items = {"obstacles": ["⟧", "▆", "▓", "ߛ", "☎", "Ր", "♨", "இ", "☘", "□", "▯"],
+            "table_symbol": "▆","door": "⟧", "box": "ߛ", "blood": "~", "answerphone": "□", "front_door": "▯",
+            "record": "record", "door_key": "door key", "note": "note"}
+
     obstacles = ["⟧", "▆", "▓", "ߛ", "☎", "Ր", "♨", "இ", "☘", "□", "▯"]
     table_symbol = "▆"
     door = "⟧"
@@ -86,26 +90,26 @@ def first_level():
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching_box(board[y_hero + y_diff][x_hero + x_diff], box) and not is_door_key_in_inventory(door_key, added_items):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], box) and not is_door_key_in_inventory(door_key, added_items):
             added_items.append(door_key)
             add_to_inventory(inventory, added_items)
 
-        if is_touching_table(board[y_hero + y_diff][x_hero + x_diff], table_symbol) and not is_note_in_inventory(note, added_items):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], table_symbol) and not is_note_in_inventory(note, added_items):
             added_items.append(note)
             add_to_inventory(inventory, added_items)
 
-        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if is_touching_answerphone(board[y_hero + y_diff][x_hero + x_diff], answerphone):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], answerphone):
             added_items.append(record)
             add_to_inventory(inventory, added_items)
 
-        if is_touching_door(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_door_key_in_inventory(door_key, added_items):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_door_key_in_inventory(door_key, added_items):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             obstacles.remove(door)
 
-        if is_touching_front_door(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_note_in_inventory(note, added_items) and is_record_in_inventory(inventory, record):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_note_in_inventory(note, added_items) and is_record_in_inventory(inventory, record):
             return dutifulness, lives, inventory
 
         elif input_key == "q":
@@ -149,25 +153,25 @@ def second_level(dutifulness, lives, inventory):
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching_blood(board[y_hero + y_diff][x_hero + x_diff], blood):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if is_touching_twanas(board[y_hero + y_diff][x_hero + x_diff], twanas_symbol):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], twanas_symbol):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             added_items.append(twanas)
             add_to_inventory(inventory, added_items)
             added_items.remove(twanas)
 
-        if is_touching_pickaxe(board[y_hero + y_diff][x_hero + x_diff], pickaxe_symbol):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], pickaxe_symbol):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             added_items.append(pickaxe)
             add_to_inventory(inventory, added_items)
 
-        if is_touching_rock(board[y_hero + y_diff][x_hero + x_diff], rock) and is_pickaxe_in_inventory(inventory, pickaxe):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], rock) and is_pickaxe_in_inventory(inventory, pickaxe):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             obstacles.remove(rock)
 
-        if is_touching_scissors(board[y_hero + y_diff][x_hero + x_diff], scissors_symbol) and not is_scissors_in_inventory(inventory, scissors):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], scissors_symbol) and not is_scissors_in_inventory(inventory, scissors):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             added_items.append(scissors)
             add_to_inventory(inventory, added_items)
