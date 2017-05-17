@@ -75,7 +75,7 @@ def first_level():
     door_key = "door key"
 
     inventory = {"gun": 1, "bullets": 2}
-    added_items = []
+
 
     input_key = getch()  #control
 
@@ -102,9 +102,8 @@ def first_level():
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], answerphone) and not is_item_in_inventory(record, inventory):
             add_to_inventory(inventory, record)
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], door) and is_door_closed(obstacles, door) and is_item_in_inventory(door_key, inventory):
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], door) and is_item_in_inventory(door_key, inventory):
             board[y_hero + y_diff][x_hero + x_diff] = " "
-            obstacles.remove(door)
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_item_in_inventory(note, inventory) and is_item_in_inventory(record, inventory):
             return dutifulness, lives, inventory
@@ -125,7 +124,6 @@ def second_level(dutifulness, lives, inventory):
     previous_sign = board[y_hero][x_hero]
 
     obstacles = ["▓", "☘", "༊", "✀", "⛏", "༼"]
-    added_items = []
     blood = "~"
     twanas_symbol = "✞"
     twanas = "twanas"
