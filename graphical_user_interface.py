@@ -1,5 +1,5 @@
 from collections import OrderedDict
-def print_graphical_user_interface(inventory, dutifulness, lives):
+def print_graphical_user_interface(inventory, dutifulness, lives, log):
     """Displays inventory in particular order."""
 
     #Finds the longest word by counting letters of every word in inventory.
@@ -25,6 +25,8 @@ def print_graphical_user_interface(inventory, dutifulness, lives):
 
     print("-" * (9 + the_longest_word))
     print("Total number of items: ", sum(inventory.values()))
+    print("\nLog: ")
+    print(log)
 
 def add_to_inventory(inventory, item):
     """Adds to the inventory dictionary a list of items from added_items."""
@@ -41,11 +43,3 @@ def subtract_dutifulness(dutifulness):
     dutifulness -= 20
 
     return dutifulness
-
-def print_first_level_description():
-
-    print("\nDESCRIPTION BLAHBLAHBLAH")
-
-def print_second_level_description():
-
-    print("\nSECOND LEVEL OMG")
