@@ -9,16 +9,12 @@ lightgreen = '\x1b[0;36;40m'
 white = '\x1b[0;37;40m'
 ends = '\x1b[0m'
 
-sign_colours = {"X": OKBLUE, "/": HEADER}
 
-sing_colours = {'♫': red, '♞': red, '☎': blue, 'ᚙ': grey, 'ↈ': , '⍍': , '▆': grey, '⛏': red '⛚': red,
-                '✿': yelow, '❽': white, '♨': white,'⚿': red, '✀': blue, '□': , '⟧': white, '▓': white, '☘': green,
+sign_colours = {'♫': red, '♞': red, '☎': blue, 'ᚙ': grey, 'ↈ': white, '⍍': white, '▆': grey, '⛏': red, '⛚': red,
+                '✿': yellow, '❽': white, '♨': white,'⚿': red, '✀': blue, '□': white, '⟧': white, '▓': white, '☘': green,
                 '⏰': yellow, '⛔': red, '⛿': lightgreen, 'Ր': green, 'இ': white, 'ߛ': white,}
 
 
-('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-'''
->>>>>>> Stashed changes
 
 def create_board(filename):
     board_file = open(filename, 'r')
@@ -30,7 +26,7 @@ def create_board(filename):
     board_file.close()
 
     return board
-'''
+
 def get_coloured_sign(sign):
     if sign in sign_colours:
         return sign_colours[sign] + sign + ends
@@ -38,8 +34,6 @@ def get_coloured_sign(sign):
         return sign
 
 
-print(get_coloured_sign('♞'))
-'''
 def print_board(board):
     """Prints board."""
 
@@ -56,4 +50,3 @@ def insert_player(board, y, x):
     board[y][x] = player
 
     return board
-'''
