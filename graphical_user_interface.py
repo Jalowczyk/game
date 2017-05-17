@@ -26,15 +26,14 @@ def print_graphical_user_interface(inventory, dutifulness, lives):
     print("-" * (9 + the_longest_word))
     print("Total number of items: ", sum(inventory.values()))
 
-def add_to_inventory(inventory, added_items):
+def add_to_inventory(inventory, item):
     """Adds to the inventory dictionary a list of items from added_items."""
 
-    for item in added_items:
-        if item in inventory:
-            inventory[item] += 1
-        else:
-            inventory[item] = 1
-    
+    if item in inventory:
+        inventory[item] += 1
+    else:
+        inventory[item] = 1
+
     return inventory
 
 def subtract_dutifulness(dutifulness):

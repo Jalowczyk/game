@@ -1,6 +1,9 @@
 def is_touching(position_on_board, item):
     return position_on_board == item
 
+def is_item_in_inventory(item, inventory):
+    return item in inventory 
+
 def is_door_key_in_inventory(door_key, added_items):
     return door_key in added_items
 
