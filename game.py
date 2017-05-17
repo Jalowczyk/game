@@ -4,7 +4,7 @@ from graphical_user_interface import *
 from screens import *
 from create_board import *
 from interactions import *
-from levels import *
+
 
 def getch():
     """Connects keys with funcion."""
@@ -27,7 +27,11 @@ def move_by(y, x, y_change, x_change):
 
     return y, x
 
-    
+def print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, lives):
+    insert_player(board, y_hero, x_hero)
+    print_board(board)
+    print_graphical_user_interface(inventory, dutifulness, lives)
+
 def control_position(input_key):
 
     if input_key == "d":
@@ -105,13 +109,11 @@ def first_level():
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_item_in_inventory(note, inventory) and is_item_in_inventory(record, inventory):
             return dutifulness, lives, inventory
 
-        elif input_key == "q":
+        if input_key == "q":
             sys.exit()
 
         previous_sign = board[y_hero][x_hero]
-        insert_player(board, y_hero, x_hero)
-        print_board(board)
-        print_graphical_user_interface(inventory, dutifulness, lives)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, lives)
         print_first_level_description()
 
 def second_level(dutifulness, lives, inventory):
@@ -169,9 +171,7 @@ def second_level(dutifulness, lives, inventory):
             return dutifulness, lives, inventory
 
         previous_sign = board[y_hero][x_hero]
-        insert_player(board, y_hero, x_hero)
-        print_board(board)
-        print_graphical_user_interface(inventory, dutifulness, lives)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, lives)
         print_second_level_description()
 
 def main():
