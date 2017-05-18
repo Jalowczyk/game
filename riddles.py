@@ -1,95 +1,35 @@
-riddles = {"1": 'What police officer should carries with himself?',
-            "2": 'What  you should put before gather a evidence?',
-            "3": 'What was a murder weapon?'}
-hints = {"1":'LAST TRY: G__' ,
-            "2": 'LAST TRY: ___V_',
-            "3":'LAST TRY: G__'}
-description = print("Time to prove your experience..")
-count = 1
-wrong = "Lost your chance, sorry!"
-good = ("Yes, you are good!")
+riddles = {"1": '\nWhat police officer should carries with himself? ',
+            "2": '\nWhat you should put before gather a evidence? ',
+            "3": '\nDo you understand that not listening to higher ranks lead to you being permanently discharged? ',
+            "4": "\nWhat's the name of the U.S. Navy's primary special operations force? "}
+hints = {"1":'\nIt starts with letter "g"... ' ,
+            "2": '\nIt starts with letter "g"... ',
+            "3":'\nIt starts with letter "y"... ',
+            "4": '\nIt starts with letter "s"... '}
 
+answer_dic = {"1": "gun", "2": "gloves","3": "yes", "4": "seals"}
 
-def riddles1(lives, dutifulness, inwentory):
-    print(description)
-    riddle = input(riddles["1"])
-    answer = "gun"
+red = '\033[93m'
+white = '\033[0m'
 
-    while riddle != answer and count <2:
-        riddle = input(hints["1"])
-        count+=1
-        if riddle == answer:
-            dutifulness += 20
-            lives += 1
-            print(good)
-        else:
-            print(wrong)
-
-def riddles2(lives, dutifulness, inwentory):
-    print(description)
-    riddle = input(riddles["2"])
-    answer = "gloves"
+def riddle(dutifulness, number):
+    print(red, "\nBoss: before you go, you should prove your dutifulness...",
+        "\nIf you are correct, you will earn +20 dutifulness,",
+        "\nif not... you will lose -10 dutifulness for a try.", white)
+    riddle = input(riddles[number])
+    answer = answer_dic[number]
+    count = 0
+    if riddle.lower() == answer:
+        dutifulness += 20
+        return dutifulness
 
     while riddle != answer and count <2:
-        riddle = input(hints["2"])
+        riddle = input(hints[number])
         count+=1
-        if riddle == answer:
+        if riddle.lower() == answer:
             dutifulness += 20
-            lives += 1
-            print(good)
+
         else:
-            print(wrong)
+            dutifulness -= 10
 
-def riddles3(lives, dutifulness, inwentory):
-    print(description)
-    riddle = input(riddles["3"])
-    answer = "axe"
-
-    while riddle != answer and count <2:
-        riddle = input(hints["3"])
-        count+=1
-        if riddle == answer:
-            dutifulness += 20
-            lives += 1
-            print(good)
-        else:
-            print(wrong)
-
-
-'''
-from random import randint
-
-def hot_cold_game():
-    random_number = []
-    while len(random_number) != 3:
-        num = randint(0, 9)
-        if num not in random_number:
-            random_number.append(str(num))
-
-    while True:
-        guess_number = input("Well,I think about 3-digits number, digits in, do not repeats,
-                                can  you guess? ]:> ")
-
-        while not guess_number.isdigit() or len(guess_number) != 3:
-            guess_number = input("3-DIGIT INTEGER, something unclear detective?")
-
-        guess_number = list(guess_number)
-        #print (guess_number)
-
-        printing_result = []
-
-        for i, elem in enumerate(guess_number):
-            if elem in random_number:
-                if elem == random_number[i]:
-                    printing_result.insert(0, 'hot')
-                else:
-                    printing_result.append('warm')
-
-        if not printing_result:
-            print ("cold!")
-
-        print (*printing_result)
-        if all([i == 'hot' for i in printing_result]):
-            print ('Wow! You truly are a detective! :)')
-            break
-'''
+    return dutifulness

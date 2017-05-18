@@ -3,6 +3,8 @@ from graphical_user_interface import *
 from screens import *
 from create_board import *
 from interactions import *
+from riddles import *
+
 red = '\033[93m'
 
 
@@ -52,14 +54,14 @@ def control_position(input_key):
 
     return x_diff, y_diff
 
-def first_level():
+def process_first_level(dutifulness, inventory, log):
     """Handle game's first level game."""
     os.system("clear")
     read_welcome_screen_file()
     x_hero = 1  #starting position of player
     y_hero = 1
     lives = 3
-    dutifulness = 100
+    #dutifulness = 100
     log = "DESCRIPTION ABOUT FIRST LEVEL"
     board = create_board('home.csv')
     previous_sign = board[y_hero][x_hero]
@@ -75,7 +77,6 @@ def first_level():
     note = "note"
     door_key = "door key"
 
-    inventory = {"gun": 1, "bullets": 2}
 
 
     input_key = getch()  #control
@@ -114,7 +115,8 @@ def first_level():
                 log = "I need to find a key!"
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_item_in_inventory(note, inventory) and is_item_in_inventory(record, inventory):
-            return dutifulness,  inventory, log
+            dutifulness = riddle(dutifulness, "1")
+            return dutifulness, inventory, log
 
         if input_key == "q":
             sys.exit()
@@ -127,7 +129,7 @@ def first_level():
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
         sys.exit()
 
-def second_level(dutifulness,  inventory, log):
+def process_second_level(dutifulness, inventory, log):
     """Handle game's second level game."""
     os.system("clear")
     x_hero = 1  #starting position of player
@@ -149,7 +151,7 @@ def second_level(dutifulness,  inventory, log):
 
     input_key = getch()  #control
 
-    while input_key != "q":
+    while dutifulness != 0:
         x_diff = 0
         y_diff = 0
 
@@ -186,12 +188,18 @@ def second_level(dutifulness,  inventory, log):
             log = "I need to go back to police station now."
 
         if is_item_in_inventory(scissors, inventory) and are_all_twanas_in_inventory(inventory) and is_touching(board[y_hero + y_diff][x_hero + x_diff], enter):
-            return dutifulness,  inventory, log
+            dutifulness = riddle(dutifulness, "2")
+            return dutifulness, inventory, log
 
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
-def third_level(dutifulness,  inventory, log):
+    if dutifulness == 0:
+        log = red + "I have contaminated murder scene... \nI got fired from a police..."
+        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        sys.exit()
+
+def process_third_level(dutifulness,  inventory, log):
     """Handle game's first level game."""
     os.system("clear")
     x_hero = 1  #starting position of player
@@ -210,7 +218,7 @@ def third_level(dutifulness,  inventory, log):
 
     input_key = getch()  #control
 
-    while input_key != "q":
+    while dutifulness != 0:
         x_diff = 0
         y_diff = 0
 
@@ -235,7 +243,8 @@ def third_level(dutifulness,  inventory, log):
             else:
                 log = "Oh It's closed and I forgot a key! \nI need to find Michael to borrow a key from him."
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], police_station_door):
-            return dutifulness,  inventory, log
+            dutifulness = riddle(dutifulness, "3")
+            return dutifulness, inventory, log
 
         if input_key == "q":
             sys.exit()
@@ -243,8 +252,12 @@ def third_level(dutifulness,  inventory, log):
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
+    if dutifulness == 0:
+        log = red + "I have contaminated murder scene... \nI got fired from a police..."
+        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        sys.exit()
 
-def fourth_level(dutifulness,  inventory, log):
+def process_fourth_level(dutifulness, inventory, log):
     """Handle game's third level game."""
     os.system("clear")
     x_hero = 1  #starting position of player
@@ -252,15 +265,16 @@ def fourth_level(dutifulness,  inventory, log):
     board = create_board("police_station.csv")
     previous_sign = board[y_hero][x_hero]
 
-    obstacles = ["☎", "⚿", "▆", "▓", "⟧", "@"]
+    obstacles = ["☎", "⚿", "▆", "▓", "⟧", "@", "▯"]
     key_to_office_symbol = "⚿"
     key_to_office = "key to office"
     door = "⟧"
     telephone = "☎"
+    front_door = "▯"
 
     input_key = getch()  #control
 
-    while input_key != "q":
+    while dutifulness != 0:
         x_diff = 0
         y_diff = 0
 
@@ -285,16 +299,56 @@ def fourth_level(dutifulness,  inventory, log):
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], telephone):
             log = "TELEPHONE"
 
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door):
+            dutifulness = riddle(dutifulness, "4")
+            return dutifulness, inventory, log
+
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
+def process_fifth_level(dutifulness, inventory, log):
+    """Handle game's second level game."""
+    os.system("clear")
+    x_hero = 1  #starting position of player
+    y_hero = 1
+    board = create_board("boss.csv")
+    previous_sign = board[y_hero][x_hero]
+    log = "DESCRIPTION ABOUT SECOND LEVEL"
+
+    obstacles = ["▓"]
+    clock = "⏰"
+
+    input_key = getch()  #control
+
+    while dutifulness != 0:
+        x_diff = 0
+        y_diff = 0
+
+        input_key = getch()
+        x_diff, y_diff = control_position(input_key)
+        board[y_hero][x_hero] = previous_sign
+
+        if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
+            y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], clock):
+            return dutifulness, inventory, log
+
+        previous_sign = board[y_hero][x_hero]
+        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
 def main():
+    log = []
+    inventory = {"gun": 1, "bullets": 2}
+    dutifulness = 100
 
-        dutifulness, inventory, log = first_level()
-        second_level(dutifulness, inventory, log)
-        third_level(dutifulness, inventory, log)
-        fourth_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_first_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_second_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_third_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_fourth_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_fifth_level(dutifulness, inventory, log)
+
+
 
 
 main()
