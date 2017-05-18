@@ -14,8 +14,7 @@ white = '\033[0m'
 
 def riddle(dutifulness, number):
     print(red, "\nBoss: before you go, you should prove your dutifulness...",
-        "\nIf you are correct, you will earn +20 dutifulness,",
-        "\nif not... you will lose -10 dutifulness for a try.", white)
+        "\nIf you are correct, you will earn +20 dutifulness.", white)
     riddle = input(riddles[number])
     answer = answer_dic[number]
     count = 0
@@ -28,8 +27,6 @@ def riddle(dutifulness, number):
         count+=1
         if riddle.lower() == answer:
             dutifulness += 20
-
+            return dutifulness
         else:
-            dutifulness -= 10
-
-    return dutifulness
+            return dutifulness

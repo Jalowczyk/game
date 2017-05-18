@@ -4,6 +4,7 @@ from screens import *
 from create_board import *
 from interactions import *
 from riddles import *
+from hotcold import *
 
 red = '\033[93m'
 
@@ -56,12 +57,10 @@ def control_position(input_key):
 
 def process_first_level(dutifulness, inventory, log):
     """Handle game's first level game."""
-    os.system("clear")
-    read_welcome_screen_file()
+
     x_hero = 1  #starting position of player
     y_hero = 1
     lives = 3
-    #dutifulness = 100
     log = "DESCRIPTION ABOUT FIRST LEVEL"
     board = create_board('home.csv')
     previous_sign = board[y_hero][x_hero]
@@ -125,8 +124,8 @@ def process_first_level(dutifulness, inventory, log):
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
 
     if dutifulness == 0:
-        log = red + "I have contaminated murder scene... \nI got fired from a police..."
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        os.system("clear")
+        print_screen("loose.csv")
         sys.exit()
 
 def process_second_level(dutifulness, inventory, log):
@@ -195,9 +194,10 @@ def process_second_level(dutifulness, inventory, log):
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
     if dutifulness == 0:
-        log = red + "I have contaminated murder scene... \nI got fired from a police..."
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        os.system("clear")
+        print_screen("loose.csv")
         sys.exit()
+
 
 def process_third_level(dutifulness,  inventory, log):
     """Handle game's first level game."""
@@ -253,8 +253,8 @@ def process_third_level(dutifulness,  inventory, log):
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
     if dutifulness == 0:
-        log = red + "I have contaminated murder scene... \nI got fired from a police..."
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        os.system("clear")
+        print_screen("loose.csv")
         sys.exit()
 
 def process_fourth_level(dutifulness, inventory, log):
@@ -306,6 +306,7 @@ def process_fourth_level(dutifulness, inventory, log):
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
+
 def process_fifth_level(dutifulness, inventory, log):
     """Handle game's second level game."""
     os.system("clear")
@@ -332,21 +333,36 @@ def process_fifth_level(dutifulness, inventory, log):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], clock):
+            hot_and_cold_game()
             return dutifulness, inventory, log
 
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
 
 def main():
+    os.system("clear")
+    print_screen("welcome_screen.csv")
+    print_screen("how_to_play.csv")
+    print_screen("choose_your_hero.csv")
+
+    hero_number_chosen_by_user = choose_character()
+
+    if hero_number_chosen_by_user == "1":
+        dutifulness = 40
+
+    if hero_number_chosen_by_user == "2":
+        dutifulness = 60
+
     log = []
-    inventory = {"gun": 1, "bullets": 2}
-    dutifulness = 100
+    inventory = {"gun": 1}
 
     dutifulness, inventory, log = process_first_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_second_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_third_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_fourth_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_fifth_level(dutifulness, inventory, log)
+    
+    print_screen("won.csv")
 
 
 
