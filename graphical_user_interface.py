@@ -1,15 +1,15 @@
 from collections import OrderedDict
-def print_graphical_user_interface(inventory, dutifulness, lives, log):
+def print_graphical_user_interface(inventory, dutifulness, log):
     """Displays inventory in particular order."""
 
     #Finds the longest word by counting letters of every word in inventory.
     the_longest_word = (max(map(len, inventory)))
 
     print("{} {:>25} {}".format("Inventory:", "Dutifulness:", dutifulness))
-    print("-" * (9 + the_longest_word), end ="")
-    print("{:>11} {}".format("Lives:", lives))
+    print("-" * (9 + the_longest_word))
+
     #Formats table width to be as long as the longest item.
-    print("{:>8} {:>{width}}".format('count', 'item name',
+    print("{:>8} {:>{width}}".format('count', 'item',
         width = the_longest_word))
 
 
