@@ -197,7 +197,11 @@ def process_second_level(dutifulness, inventory, log):
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], enter):
             if is_item_and_all_twanas_in_inventory(scissors, inventory):
+                dutifulness = riddle(dutifulness, "2")
                 return dutifulness, inventory, log
+
+        if input_key == "q":
+            sys.exit()
 
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory,
@@ -319,6 +323,9 @@ def process_fourth_level(dutifulness, inventory, log):
             dutifulness = riddle(dutifulness, "4")
             return dutifulness, inventory, log
 
+        if input_key == "q":
+            sys.exit()
+
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory,
                                     dutifulness, log)
@@ -353,6 +360,9 @@ def process_fifth_level(dutifulness, inventory, log):
             hot_and_cold_game()
             return dutifulness, inventory, log
 
+        if input_key == "q":
+            sys.exit()
+
         previous_sign = board[y_hero][x_hero]
         print_board_and_insert_player(board, y_hero, x_hero, inventory,
                                       dutifulness, log)
@@ -367,7 +377,7 @@ def main():
     hero_number_chosen_by_user = choose_character()
 
     if hero_number_chosen_by_user == "1":
-        dutifulness = 40
+        dutifulness = 400
 
     if hero_number_chosen_by_user == "2":
         dutifulness = 60
