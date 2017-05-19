@@ -1,6 +1,7 @@
-riddles = {"1": '\nWhat police officer should carries with himself? ',
+riddles = {"1": '\nWhat do the police officer should carry with themselves? ',
             "2": '\nWhat you should put before gather a evidence? ',
-            "3": '\nDo you understand that not listening to higher ranks lead to you being permanently discharged? ',
+            "3": '\nDo you understand that not listening to higher ranks' +
+            'lead to you being permanently discharged? ',
             "4": "\nWhat's the name of the U.S. Navy's primary special operations force? "}
 hints = {"1":'\nIt starts with letter "g"... ' ,
             "2": '\nIt starts with letter "g"... ',
