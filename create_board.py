@@ -9,7 +9,7 @@ lightgreen = '\x1b[0;36;40m'
 white = '\x1b[0;37;40m'
 ends = '\x1b[0m'
 
-sign_colours = {'♫': red, '♞': red, '☎': blue, 'ᚙ': grey, 'ↈ': white, '⍍': white, '▆': grey, '⛏': red, '⛚': red,
+sign_colours = {'♫': red, '~': red, '♞': red, '☎': blue, 'ᚙ': grey, 'ↈ': white, '⍍': white, '▆': grey, '⛏': red, '⛚': red,
                 '✿': yellow, '❽': white, '♨': white,'⚿': red, '✀': blue, '□': white, '⟧': white, '▓': white, '☘': green,
                 '⏰': yellow, '⛔': red, '⛿': lightgreen, 'Ր': green, 'இ': white, 'ߛ': white,}
 
