@@ -8,7 +8,6 @@ def hot_and_cold_game():
             random_number.append(str(num))
 
     random_number = ''.join(random_number)
-    print(random_number)
 
     while True:
         guess_number = input("\nI think about 3-digits number, digits in, do not repeats, can you guess? ")
