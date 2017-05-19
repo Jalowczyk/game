@@ -9,8 +9,11 @@ def hot_and_cold_game():
 
     random_number = ''.join(random_number)
 
+    print("\nIt's time to prove your dutifulness, officer.")
+
     while True:
-        guess_number = input("\nI think about 3-digits number, digits in, do not repeats, can you guess? ")
+        guess_number = input("\nI think about 3-digits number," +
+                        "digits in, do not repeats, can you guess? ")
 
         while not guess_number.isdigit() or len(guess_number) != 3:
             guess_number = input("\n3-DIGIT INTEGER, something unclear detective? ")
