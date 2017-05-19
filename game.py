@@ -363,7 +363,7 @@ def main():
     hero_number_chosen_by_user = choose_character()
 
     if hero_number_chosen_by_user == "1":
-        dutifulness = 5000
+        dutifulness = 40
 
     if hero_number_chosen_by_user == "2":
         dutifulness = 60
