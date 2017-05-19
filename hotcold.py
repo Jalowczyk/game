@@ -1,4 +1,5 @@
 from random import randint
+import sys
 
 def hot_and_cold_game():
     random_number = []
@@ -6,6 +7,9 @@ def hot_and_cold_game():
         num = randint(0, 9)
         if num not in random_number:
             random_number.append(str(num))
+
+    if len(sys.argv) > 1:
+        print(*random_number)
 
     random_number = ''.join(random_number)
 
