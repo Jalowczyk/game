@@ -5,6 +5,8 @@ from create_board import *
 from interactions import *
 from riddles import *
 from hotcold import *
+from highscores import *
+
 
 red = '\033[93m'
 
@@ -30,7 +32,8 @@ def move_by(y, x, y_change, x_change):
 
     return y, x
 
-def print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log):
+def print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,
+                                  log):
     insert_player(board, y_hero, x_hero)
     print_board(board)
     print_graphical_user_interface(inventory, dutifulness, log)
@@ -61,7 +64,7 @@ def process_first_level(dutifulness, inventory, log):
     x_hero = 1  #starting position of player
     y_hero = 1
     lives = 3
-    log = "DESCRIPTION ABOUT FIRST LEVEL"
+    log = "Hmm... I'm on the crime scene. \nI need to collect the evidence."
     board = create_board('home.csv')
     previous_sign = board[y_hero][x_hero]
 
@@ -76,8 +79,6 @@ def process_first_level(dutifulness, inventory, log):
     note = "note"
     door_key = "door key"
 
-
-
     input_key = getch()  #control
 
     while dutifulness != 0:
@@ -91,37 +92,42 @@ def process_first_level(dutifulness, inventory, log):
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], box) and not is_item_in_inventory(door_key, inventory):
+        if is_taking_item(board[y_hero + y_diff][x_hero + x_diff], box,
+                          door_key, inventory):
             add_to_inventory(inventory, door_key)
             log = "Now I can open the door!"
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], table_symbol) and not is_item_in_inventory(note, inventory):
+        if is_taking_item(board[y_hero + y_diff][x_hero + x_diff], table_symbol,
+                          note, inventory):
             add_to_inventory(inventory, note)
-            log = "NOTE + I hear an answerphone from the another room..."
+            log = "Note: +48500 000 000 - Michael Brown \nI hear an answering machine from another room..."
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], blood):
             dutifulness = subtract_dutifulness(dutifulness)
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], answerphone) and not is_item_in_inventory(record, inventory):
+        if is_taking_item(board[y_hero + y_diff][x_hero + x_diff], answerphone,
+                          record, inventory):
             add_to_inventory(inventory, record)
-            log = "RECORD + So I should go and check if I find something important in forest."
+            log = "Record: Come join us on get-together at my cabin in Nashville!"
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], door):
             if is_item_in_inventory(door_key, inventory):
                 board[y_hero + y_diff][x_hero + x_diff] = " "
-                log = "Oh, there is so much blood around the table! \nAnd there is something lying..."
+                log = "There is something lying on the table..."
             else:
                 log = "I need to find a key!"
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door) and is_item_in_inventory(note, inventory) and is_item_in_inventory(record, inventory):
-            dutifulness = riddle(dutifulness, "1")
-            return dutifulness, inventory, log
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door):
+            if are_items_in_inventory(note, record, inventory):
+                dutifulness = riddle(dutifulness, "1")
+                return dutifulness, inventory, log
 
         if input_key == "q":
             sys.exit()
 
         previous_sign = board[y_hero][x_hero]
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness, log)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                      dutifulness, log)
 
     if dutifulness == 0:
         os.system("clear")
@@ -135,7 +141,7 @@ def process_second_level(dutifulness, inventory, log):
     y_hero = 1
     board = create_board("forest.csv")
     previous_sign = board[y_hero][x_hero]
-    log = "DESCRIPTION ABOUT SECOND LEVEL"
+    log = "I need to collect these strange crosses, they can be evidence..."
 
     obstacles = ["▓", "☘", "༊", "✀", "⛏", "༼", "▯"]
     blood = "~"
@@ -177,21 +183,23 @@ def process_second_level(dutifulness, inventory, log):
             if is_item_in_inventory(pickaxe, inventory):
                 board[y_hero + y_diff][x_hero + x_diff] = " "
                 obstacles.remove(rock)
-                log = "A bloog-stained scissors? \nIt can be a murder weapon..."
+                log = "A bloog-stained scissors? It can be a murder weapon..."
             else:
                 log = "I need to find a tool to destroy this rock..."
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], scissors_symbol) and not is_item_in_inventory(scissors, inventory):
+        if is_taking_item(board[y_hero + y_diff][x_hero + x_diff],
+                          scissors_symbol, scissors, inventory):
             board[y_hero + y_diff][x_hero + x_diff] = " "
             add_to_inventory(inventory, scissors)
             log = "I need to go back to police station now."
 
-        if is_item_in_inventory(scissors, inventory) and are_all_twanas_in_inventory(inventory) and is_touching(board[y_hero + y_diff][x_hero + x_diff], enter):
-            dutifulness = riddle(dutifulness, "2")
-            return dutifulness, inventory, log
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], enter):
+            if is_item_and_all_twanas_in_inventory(scissors, inventory):
+                return dutifulness, inventory, log
 
         previous_sign = board[y_hero][x_hero]
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                      dutifulness,  log)
 
     if dutifulness == 0:
         os.system("clear")
@@ -206,7 +214,7 @@ def process_third_level(dutifulness,  inventory, log):
     y_hero = 1
     board = create_board('city.csv')
     previous_sign = board[y_hero][x_hero]
-    log = "DESCRIPTION ABOUT THIRD LEVEL"
+    log = "This city is mad! \nI need to find a way to the police station..."
 
     obstacles = ["▓", "▆", "⛔", "@", "⟧"]
     gate = "⛔"
@@ -229,7 +237,8 @@ def process_third_level(dutifulness,  inventory, log):
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], friend) and not is_item_in_inventory(gate_key, inventory):
+        if is_taking_item(board[y_hero + y_diff][x_hero + x_diff], friend,
+                          gate_key, inventory):
             add_to_inventory(inventory, gate_key)
             log = "Now I can enter the gate!"
 
@@ -241,8 +250,10 @@ def process_third_level(dutifulness,  inventory, log):
                 board[y_hero + y_diff][x_hero + x_diff] = " "
                 log = "Ok, let's go to police station!"
             else:
-                log = "Oh It's closed and I forgot a key! \nI need to find Michael to borrow a key from him."
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], police_station_door):
+                log = "I need to find Michael to borrow a key from him."
+
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff],
+                        police_station_door):
             dutifulness = riddle(dutifulness, "3")
             return dutifulness, inventory, log
 
@@ -250,7 +261,8 @@ def process_third_level(dutifulness,  inventory, log):
             sys.exit()
 
         previous_sign = board[y_hero][x_hero]
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                      dutifulness, log)
 
     if dutifulness == 0:
         os.system("clear")
@@ -264,10 +276,11 @@ def process_fourth_level(dutifulness, inventory, log):
     y_hero = 1
     board = create_board("police_station.csv")
     previous_sign = board[y_hero][x_hero]
+    log = "Now I need to go to my office."
 
     obstacles = ["☎", "⚿", "▆", "▓", "⟧", "@", "▯"]
-    key_to_office_symbol = "⚿"
-    key_to_office = "key to office"
+    office_key_symbol = "⚿"
+    office_key = "key to office"
     door = "⟧"
     telephone = "☎"
     front_door = "▯"
@@ -285,26 +298,27 @@ def process_fourth_level(dutifulness, inventory, log):
         if is_move_possible(y_hero + y_diff, x_hero + x_diff, obstacles, board):
             y_hero, x_hero = move_by(y_hero, x_hero, y_diff, x_diff)
 
-        if is_touching(board[y_hero + y_diff][x_hero + x_diff], key_to_office_symbol):
-            add_to_inventory(inventory, key_to_office)
-            log = "Now I can open my office door."
+        if is_touching(board[y_hero + y_diff][x_hero + x_diff], office_key_symbol):
+            add_to_inventory(inventory, office_key)
+            log = "Now I can open the office door."
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], door):
-            if is_item_in_inventory(key_to_office, inventory):
+            if is_item_in_inventory(office_key, inventory):
                 board[y_hero + y_diff][x_hero + x_diff] = " "
-                log = "Telephone is ringing, I need to pick up!"
+                log = "Telephone is ringing, I need to pick it up!"
             else:
                 log = "I need a key."
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], telephone):
-            log = "TELEPHONE"
+            log = "Boss: Senior investigator, come to my office, now."
 
         if is_touching(board[y_hero + y_diff][x_hero + x_diff], front_door):
             dutifulness = riddle(dutifulness, "4")
             return dutifulness, inventory, log
 
         previous_sign = board[y_hero][x_hero]
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                    dutifulness, log)
 
 
 def process_fifth_level(dutifulness, inventory, log):
@@ -314,7 +328,7 @@ def process_fifth_level(dutifulness, inventory, log):
     y_hero = 1
     board = create_board("boss.csv")
     previous_sign = board[y_hero][x_hero]
-    log = "DESCRIPTION ABOUT SECOND LEVEL"
+    log = "OMG I'm so anxious, what does the boss want?"
 
     obstacles = ["▓"]
     clock = "⏰"
@@ -337,7 +351,8 @@ def process_fifth_level(dutifulness, inventory, log):
             return dutifulness, inventory, log
 
         previous_sign = board[y_hero][x_hero]
-        print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,  log)
+        print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                      dutifulness, log)
 
 def main():
     os.system("clear")
@@ -348,7 +363,7 @@ def main():
     hero_number_chosen_by_user = choose_character()
 
     if hero_number_chosen_by_user == "1":
-        dutifulness = 40
+        dutifulness = 5000
 
     if hero_number_chosen_by_user == "2":
         dutifulness = 60
@@ -361,10 +376,14 @@ def main():
     dutifulness, inventory, log = process_third_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_fourth_level(dutifulness, inventory, log)
     dutifulness, inventory, log = process_fifth_level(dutifulness, inventory, log)
-    
+
+    os.system("clear")
     print_screen("won.csv")
 
+    user_name = input("\nPut your name to save your score to highscores! ")
 
+    save_to_highscores(dutifulness, user_name)
+    print_highscores()
 
-
-main()
+if __name__ == "__main__":
+    main()
