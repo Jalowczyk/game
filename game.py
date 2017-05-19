@@ -6,8 +6,6 @@ from interactions import *
 from riddles import *
 from hotcold import *
 from highscores import *
-
-
 red = '\033[93m'
 
 
@@ -23,8 +21,10 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
+
 def is_move_possible(y, x, obstacles, board):
     return board[y][x] not in obstacles
+
 
 def move_by(y, x, y_change, x_change):
     y += y_change
@@ -32,14 +32,15 @@ def move_by(y, x, y_change, x_change):
 
     return y, x
 
-def print_board_and_insert_player(board, y_hero, x_hero, inventory, dutifulness,
-                                  log):
+
+def print_board_and_insert_player(board, y_hero, x_hero, inventory,
+                                  dutifulness, log):
     insert_player(board, y_hero, x_hero)
     print_board(board)
     print_graphical_user_interface(inventory, dutifulness, log)
 
-def control_position(input_key):
 
+def control_position(input_key):
     if input_key == "d":
         x_diff = 1
         y_diff = 0
@@ -58,10 +59,10 @@ def control_position(input_key):
 
     return x_diff, y_diff
 
+
 def process_first_level(dutifulness, inventory, log):
     """Handle game's first level game."""
-
-    x_hero = 1  #starting position of player
+    x_hero = 1
     y_hero = 1
     lives = 3
     log = "Hmm... I'm on the crime scene. \nI need to collect the evidence."
@@ -134,10 +135,11 @@ def process_first_level(dutifulness, inventory, log):
         print_screen("loose.csv")
         sys.exit()
 
+
 def process_second_level(dutifulness, inventory, log):
     """Handle game's second level game."""
     os.system("clear")
-    x_hero = 1  #starting position of player
+    x_hero = 1
     y_hero = 1
     board = create_board("forest.csv")
     previous_sign = board[y_hero][x_hero]
@@ -210,7 +212,7 @@ def process_second_level(dutifulness, inventory, log):
 def process_third_level(dutifulness,  inventory, log):
     """Handle game's first level game."""
     os.system("clear")
-    x_hero = 1  #starting position of player
+    x_hero = 1
     y_hero = 1
     board = create_board('city.csv')
     previous_sign = board[y_hero][x_hero]
@@ -269,10 +271,11 @@ def process_third_level(dutifulness,  inventory, log):
         print_screen("loose.csv")
         sys.exit()
 
+
 def process_fourth_level(dutifulness, inventory, log):
     """Handle game's third level game."""
     os.system("clear")
-    x_hero = 1  #starting position of player
+    x_hero = 1
     y_hero = 1
     board = create_board("police_station.csv")
     previous_sign = board[y_hero][x_hero]
@@ -324,7 +327,7 @@ def process_fourth_level(dutifulness, inventory, log):
 def process_fifth_level(dutifulness, inventory, log):
     """Handle game's second level game."""
     os.system("clear")
-    x_hero = 1  #starting position of player
+    x_hero = 1
     y_hero = 1
     board = create_board("boss.csv")
     previous_sign = board[y_hero][x_hero]
@@ -354,6 +357,7 @@ def process_fifth_level(dutifulness, inventory, log):
         print_board_and_insert_player(board, y_hero, x_hero, inventory,
                                       dutifulness, log)
 
+
 def main():
     os.system("clear")
     print_screen("welcome_screen.csv")
@@ -371,11 +375,16 @@ def main():
     log = []
     inventory = {"gun": 1}
 
-    dutifulness, inventory, log = process_first_level(dutifulness, inventory, log)
-    dutifulness, inventory, log = process_second_level(dutifulness, inventory, log)
-    dutifulness, inventory, log = process_third_level(dutifulness, inventory, log)
-    dutifulness, inventory, log = process_fourth_level(dutifulness, inventory, log)
-    dutifulness, inventory, log = process_fifth_level(dutifulness, inventory, log)
+    dutifulness, inventory, log = process_first_level(dutifulness, inventory,
+                                                      log)
+    dutifulness, inventory, log = process_second_level(dutifulness, inventory,
+                                                      log)
+    dutifulness, inventory, log = process_third_level(dutifulness, inventory,
+                                                      log)
+    dutifulness, inventory, log = process_fourth_level(dutifulness, inventory,
+                                                      log)
+    dutifulness, inventory, log = process_fifth_level(dutifulness, inventory,
+                                                      log)
 
     os.system("clear")
     print_screen("won.csv")
